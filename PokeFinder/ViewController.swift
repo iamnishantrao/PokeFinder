@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import FirebaseDatabase
 
 class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
@@ -15,6 +16,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
     let locationManager = CLLocationManager()
     var mapHasCenteredOnce = false
+    var geoFire: GeoFire!
+    var geoFireRef: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +26,10 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         // Set user tracking mode to follow.
         mapView.userTrackingMode = MKUserTrackingMode.follow
+        
+        // Attaching GeoFire to Firebase Database reference.
+        geoFireRef = Database.database().reference()
+        geoFire = GeoFire(firebaseRef: geoFireRef)
         
     }
     
@@ -33,7 +40,10 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
 
     @IBAction func spotRandomPokemon(_ sender: Any) {
         
+        let loc = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
         
+        let rand = arc4random_uniform(151) + 1
+        createSighting(forLocation: loc, withPokemon: Int(rand))
     }
     
     func locationAuthStatus() {
@@ -91,6 +101,28 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         }
         
         return annotationView
+    }
+    
+    // Store sighting of a Pokemon using GeoFire.
+    func createSighting(forLocation location: CLLocation, withPokemon pokeId: Int) {
+        
+        geoFire.setLocation(location, forKey: "\(pokeId)")
+    }
+    
+    // Show sightings of Pokemon on map.
+    func showSightings(location: CLLocation) {
+        
+        let circleQuery = geoFire!.query(at: location, withRadius: 2.5)
+        
+        _ = circleQuery?.observe(GFEventType.keyEntered, with: { (key, location) in
+            
+            if let key = key, let location = location {
+            
+                let anno = PokeAnnotation(coordinate: location.coordinate, pokemonNumber: Int(key)!)
+                self.mapView.addAnnotation(anno)
+                
+            }
+        })
     }
     
 }
