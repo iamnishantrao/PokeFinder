@@ -4,7 +4,6 @@ An app which shows location of Pokemons reported earlier by users. Pressing the 
 
 # Screenshots:
 ![screenshot1](https://user-images.githubusercontent.com/20210939/28992750-5cb544ca-79c2-11e7-8b31-b26dead85be3.png)
-
 ![screenshot2](https://user-images.githubusercontent.com/20210939/28992749-5cb523e6-79c2-11e7-8ddd-a72a8148445f.png)
 
 # After downloading?
