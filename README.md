@@ -7,8 +7,9 @@ An app which shows location of Pokemons reported earlier by users. Pressing the 
 ![screenshot2](https://user-images.githubusercontent.com/20210939/28992749-5cb523e6-79c2-11e7-8ddd-a72a8148445f.png)
 
 # After downloading?
-1. Go to Project directory and run "pod install". Make sure that you have Cocoapods installed on your system.
-2. Build and Run the project.
+1. Go to Project directory in Terminal and run "pod install". Make sure that you have Cocoapods installed on your system.
+2. Open “.xcworkspace” in Xcode.
+3. Build and Run the project.
 
 # Requirements
 1. Swift 3.0
